@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AutoFill {
     //数据库操作类型
-    OperationType value();
+    OperationType value();//value()的作用是获取注解的参数，即数据库操作类型
 
 }
