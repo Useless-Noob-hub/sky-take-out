@@ -8,6 +8,7 @@ import com.sky.vo.DishItemVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class SetmealController {
      */
     @GetMapping("/list")
     @ApiOperation("根据分类id查询套餐")
+    @Cacheable(cacheNames = "setmealCache",key = "#categoryId" )//key: setneal::100
     public Result<List<Setmeal>> list(Long categoryId) {
         Setmeal setmeal = new Setmeal();
         setmeal.setCategoryId(categoryId);
@@ -48,15 +50,5 @@ public class SetmealController {
         List<DishItemVO> list = setmealService.getDishItemById(id);
         return Result.success(list);
     }
-    /**
-     * 批量删除套餐
-     * @param ids
-     * @return
-     */
-    @DeleteMapping
-    @ApiOperation("批量删除套餐")
-    public Result delete(@RequestParam List<Long> ids){
-        setmealService.deleteBatch(ids);
-        return Result.success();
-    }
+
 }
