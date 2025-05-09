@@ -64,7 +64,8 @@ sky:
     notifyUrl: ${sky.wechat.notifyUrl}
     refundNotifyUrl: ${sky.wechat.refundNotifyUrl}
   shop:     # 外卖商家地址
-    address:
-    checkAddress: 0 #是否开启地址校验功能
+    address: 海南省海口市美兰区人民大道58号
+
+    checkAddress: 1 #是否开启地址校验功能
   baidu:
-    ak:   #百度开放平台获取
+    ak: aAZn8qlMT98bb2SuwvLhm2sXXjr8azXY  #百度开放平台获取
