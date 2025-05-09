@@ -106,7 +106,9 @@ public class OrderServiceImpl implements OrderService {
         orders.setPhone(addressBook.getPhone());
         orders.setConsignee(addressBook.getConsignee());
         orders.setUserId(userId);
+
         this.orders = orders;//将订单对象保存到order对象中
+
         orderMapper.insert(orders);
 
         List<OrderDetail>orderDetailList = new ArrayList<>();
@@ -186,7 +188,7 @@ public class OrderServiceImpl implements OrderService {
         //通过websocket向客户端浏览器推送消息 type orderId content
         Map map = new HashMap();
         map.put("type",1);//1表示来单提醒，2表示客户催单
-        map.put("orderId",this.orders.getId());
+        map.put("orderId",id);
         map.put("content","订单号："+this.orders.getNumber());
         String json = JSON.toJSONString(map);
         webSocketServer.sendToAllClient(json);
@@ -565,6 +567,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+
     /**
      * 检查客户的收货地址是否超出配送范围
      * @param address
@@ -618,8 +621,26 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    public boolean isCheckAddress() {
-        return checkAddress;
+    /**
+     * 客户催单
+     */
+    public void reminder(Long id) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为4
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Map map = new HashMap();
+        map.put("type",2);//1表示来单提醒，2表示客户催单
+        map.put("orderId",id);
+        map.put("content","订单号："+ordersDB.getNumber());
+        String json = JSON.toJSONString(map);
+
+        webSocketServer.sendToAllClient(json);
+
     }
+
 }
 
