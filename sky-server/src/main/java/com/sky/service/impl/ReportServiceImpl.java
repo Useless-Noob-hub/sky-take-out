@@ -41,14 +41,7 @@ public class ReportServiceImpl implements ReportService {
 
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
 
-        //当前集合用于存放begin到end范围内的每天的日期
-        List<LocalDate> dateList = new ArrayList<>();
-        dateList.add(begin);
-        while(!begin.equals(end))
-        {//日期计算，计算指定日期的后一天对应的日期
-            begin=begin.plusDays(1);
-            dateList.add(begin);
-        }
+        List<LocalDate> dateList = getDateList(begin, end);
         List<Double> turnoverList = new ArrayList<>();
         for (LocalDate date : dateList) {
             //查询date日期对应的营业额数据，营业额：状态为“已完成的订单金额合计”
@@ -75,6 +68,23 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
+     * 获取两个日期之间的天数集合
+     * @param begin
+     * @param end
+     * @return
+     */
+    private static List<LocalDate> getDateList(LocalDate begin, LocalDate end) {
+        List<LocalDate> dateList = new ArrayList<>();
+        dateList.add(begin);
+        while(!begin.equals(end))
+        {//日期计算，计算指定日期的后一天对应的日期
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+        return dateList;
+    }
+
+    /**
      * 统计指定时间区间内的用户数据
      * @param begin
      * @param end
@@ -83,12 +93,7 @@ public class ReportServiceImpl implements ReportService {
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
 
         //当前集合用于存放begin到end范围内的每天的日期
-        List<LocalDate> dateList = new ArrayList<>();
-        dateList.add(begin);
-        while (!begin.equals(end)) {//日期计算，计算指定日期的后一天对应的日期
-            begin = begin.plusDays(1);
-            dateList.add(begin);
-        }
+        List<LocalDate> dateList = getDateList(begin, end);
 
 
         //存放每天新增数量 select count (id) from user where create_time <? and create_time >?
@@ -129,12 +134,7 @@ public class ReportServiceImpl implements ReportService {
      */
     public OrderReportVO getOrdersStatistics(LocalDate begin, LocalDate end) {
         //当前集合用于存放begin到end范围内的每天的日期
-        List<LocalDate> dateList = new ArrayList<>();
-        dateList.add(begin);
-        while (!begin.equals(end)) {//日期计算，计算指定日期的后一天对应的日期
-            begin = begin.plusDays(1);
-            dateList.add(begin);
-        }
+        List<LocalDate> dateList = getDateList(begin, end);
 
         //存放每天的订单总数
         List<Integer> orderCountList = new ArrayList<>();
