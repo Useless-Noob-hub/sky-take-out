@@ -14,6 +14,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetmealMapper {
@@ -83,4 +84,11 @@ public interface SetmealMapper {
      */
     @AutoFill(OperationType.UPDATE)// 表示当前方法为修改操作
     void update(Setmeal setmeal);
+
+    /**
+     * 根据条件统计套餐数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
